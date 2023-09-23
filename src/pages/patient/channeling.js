@@ -27,7 +27,6 @@ const DoctorList = () => {
   const renderDoctorItem = ({ item }) => (
     <View style={styles.doctorItem}>
       <Text style={styles.doctorName}>{item.employeeName}</Text>
-      {/* Display more doctor information here */}
     </View>
   );
 

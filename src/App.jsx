@@ -20,6 +20,7 @@ import MainMenu from "./components/mainmenu";
 import PatientProfile from "./pages/patient/patientProfile";
 import EmployeeRegistration from "./pages/employee/employeeRegistration";
 import DoctorsList from "./pages/channeling/channeling";
+import NavBar from "./components/navbar";
 
 function App() {
   const Layout = () => {
@@ -35,19 +36,43 @@ function App() {
     );
   };
 
+  const IntranetLayout = () => {
+    return (
+      <div>
+        <div>
+          <NavBar />
+        </div>
+        <div className="">
+          <Outlet />
+        </div>
+      </div>
+    );
+  };
+
   const router = createBrowserRouter([
     {
       path: "/loggedin",
       element: <Layout />,
       children: [
         {
-          path: "admin",
-          element: <Admin />,
-        },
-        {
           path: "patient",
           element: <PatientProfile />,
         },
+
+        {
+          path: "channelingdoctor",
+          element: <DoctorsList />,
+        },
+        {
+          path: "patientregistration",
+          element: <PatientRegistration />,
+        },
+      ],
+    },
+    {
+      path: "/intranet",
+      element: <IntranetLayout />,
+      children: [
         {
           path: "reception",
           element: <Reception />,
@@ -57,8 +82,12 @@ function App() {
           element: <Doctor />,
         },
         {
-          path: "channelingdoctor",
-          element: <DoctorsList />,
+          path: "admin",
+          element: <Admin />,
+        },
+        {
+          path: "employeeregistration",
+          element: <EmployeeRegistration />,
         },
       ],
     },
@@ -69,14 +98,6 @@ function App() {
     {
       path: "patientlogin",
       element: <PatientLogin />,
-    },
-    {
-      path: "employeeregistration",
-      element: <EmployeeRegistration />,
-    },
-    {
-      path: "patientregistration",
-      element: <PatientRegistration />,
     },
   ]);
 
