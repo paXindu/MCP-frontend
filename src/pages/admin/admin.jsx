@@ -4,7 +4,7 @@ function Admin() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <h1 className="text-3xl mb-72 ">
-        Comprehensive Patient Management System Admin
+        Comprehensive patient Management System Admin
       </h1>
       <div className="flex gap-9">
         <a
