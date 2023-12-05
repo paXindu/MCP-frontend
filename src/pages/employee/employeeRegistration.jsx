@@ -6,6 +6,9 @@ function EmployeeRegistration() {
     employeeNic: "",
     employeeName: "",
     employeeRoll: "DOCTOR",
+    employeePassword: "", 
+    morningAvailability: "", 
+    eveningAvailability: "", 
   });
 
   const handleChange = (e) => {
@@ -16,8 +19,23 @@ function EmployeeRegistration() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  
+
+   const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!employeeData.employeePassword) {
+    alert("Password is mandatory.");
+    return;
+  }
+  if (employeeData.employeeNic.length !== 13) {
+    alert("NIC must be 13 characters.");
+    return;
+  }
+
+  
+  
+
     try {
       const response = await axios.post(
         "http://localhost:8080/Employee/saveEmployee",
@@ -28,7 +46,8 @@ function EmployeeRegistration() {
           },
         }
       );
-      if (response.status === 202) {
+
+      if (response.status === 202 || response.status === 200 || response.status === 201) {
         alert("Employee data saved successfully.");
       } else {
         alert("Failed to save employee data.");
@@ -36,6 +55,33 @@ function EmployeeRegistration() {
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  const renderAdditionalInputs = () => {
+    if (employeeData.employeeRoll === "DOCTOR") {
+      return (
+        <>
+          <input
+            type="text"
+            name="morningAvailability"
+            value={employeeData.morningAvailability}
+            onChange={handleChange}
+            placeholder="Morning Availability"
+            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+          <input
+            type="text"
+            name="eveningAvailability"
+            value={employeeData.eveningAvailability}
+            onChange={handleChange}
+            placeholder="Evening Availability"
+            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -73,6 +119,15 @@ function EmployeeRegistration() {
             <option value="PHARMACIST">Pharmacist</option>
             <option value="LAB_TECHNICIAN">Lab Technician</option>
           </select>
+          <input
+            type="password"
+            name="employeePassword"
+            value={employeeData.employeePassword}
+            onChange={handleChange}
+            placeholder="Password"
+            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+          {renderAdditionalInputs()}
           <button
             type="submit"
             className="w-full py-2 px-4 border rounded-md text-white bg-red-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"

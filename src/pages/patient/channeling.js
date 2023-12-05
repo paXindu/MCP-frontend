@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, Text, FlatList, StyleSheet, Button, Alert } from "react-native";
 import axios from "axios";
 
 const DoctorList = () => {
@@ -27,8 +27,22 @@ const DoctorList = () => {
   const renderDoctorItem = ({ item }) => (
     <View style={styles.doctorItem}>
       <Text style={styles.doctorName}>{item.employeeName}</Text>
+      <Button
+        title="Book Doctor"
+        onPress={() => handleBookDoctor(item)}
+      />
     </View>
   );
+
+  const handleBookDoctor = (doctor) => {
+    // Perform the booking logic here
+    // For example, you can show an alert after booking:
+    Alert.alert(
+      "Booking Successful",
+      `You have successfully booked Dr. ${doctor.employeeName}`,
+      [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+    );
+  };
 
   return (
     <View style={styles.container}>

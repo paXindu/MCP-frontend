@@ -14,10 +14,10 @@ function Admin() {
           Employee Registration and Management
         </a>
         <a
-          href="/patientdatamanage"
+          href="/intranet/patientdata"
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out"
         >
-          Patient Data Management
+          Patient Data Analyzer
         </a>
       </div>
     </div>

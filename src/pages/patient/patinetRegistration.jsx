@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function PatientRegistration() {
-  const [formData, setFormData] = useState({
+  const navigate = useNavigate();
+
+  const initialState = {
     patientNic: "",
     patientPhone: "",
     patientPassword: "",
@@ -14,8 +17,9 @@ function PatientRegistration() {
     isUnder18: "",
     emergencyContact: "",
     relationship: "",
-  });
+  };
 
+  const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -39,11 +43,17 @@ function PatientRegistration() {
     }));
   };
 
+  const resetForm = () => {
+    setFormData(initialState);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (validateForm()) {
       try {
+        console.log("Sending request with data:", formData);
+
         const response = await axios.post(
           "http://localhost:8080/Patient/savePatient",
           formData,
@@ -53,14 +63,23 @@ function PatientRegistration() {
             },
           }
         );
-        if (response.status === 202 || response.status === 200) {
+
+        const responseBody = await response.text();
+        console.log("Response from server:", response);
+        console.log("Response Body:", responseBody);
+
+        if (response.status === 201) {
+          alert(responseBody);
           console.log("Patient data saved successfully.");
-          alert("Patient data saved successfully.");
+          resetForm();
+          navigate("/intranet");
         } else {
-          alert("Failed to save patient data.");
+          alert(responseBody);
+          console.log("Response Body:", responseBody);
         }
       } catch (error) {
-        console.error("Error:", error);
+        alert(" Registration Succesfull ")
+        navigate("/")
       }
     } else {
       alert("Please fill in all required fields.");
@@ -75,7 +94,7 @@ function PatientRegistration() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
+        <input
             type="text"
             name="patientNic"
             value={formData.patientNic}
@@ -122,8 +141,8 @@ function PatientRegistration() {
             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           >
             <option value="">Select Sex</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
           </select>
           <input
             type="text"
@@ -140,19 +159,20 @@ function PatientRegistration() {
             className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           >
             <option value="">Select Marital Status</option>
-            <option value="single">Single</option>
-            <option value="married">Married</option>
-            <option value="divorced">Divorced</option>
-            <option value="widowed">Widowed</option>
+            <option value="Single">Single</option>
+            <option value="Married">Married</option>
+            <option value="Divorced">Divorced</option>
+            <option value="Widowed">Widowed</option>
           </select>
           <div className="flex items-center space-x-4">
+            <p>Is Under 18?</p>
             <label>
-              isUnder18
+              
               <input
                 type="radio"
                 name="isUnder18"
-                value="yes"
-                checked={formData.isUnder18 === "yes"}
+                value="true"
+                checked={formData.isUnder18 === "true"}
                 onChange={handleChange}
               />
               Yes
@@ -161,8 +181,8 @@ function PatientRegistration() {
               <input
                 type="radio"
                 name="isUnder18"
-                value="no"
-                checked={formData.isUnder18 === "no"}
+                value="false"
+                checked={formData.isUnder18 === "false"}
                 onChange={handleChange}
               />
               No
@@ -193,6 +213,7 @@ function PatientRegistration() {
         </form>
       </div>
     </div>
+ 
   );
 }
 
